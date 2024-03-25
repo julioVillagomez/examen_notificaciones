@@ -55,12 +55,9 @@ class User extends Authenticatable
         return $this->belongsToMany(Channel::class,'user_channel');
     }
 
-    public function routeNotificationForPhone(Notification $notification): array|string
+    public function routeNotificationForSms(Notification $notification): array|string
     {
-        // Return email address only...
         return $this->phone;
- 
-        // Return email address and name...
     }
 
 
