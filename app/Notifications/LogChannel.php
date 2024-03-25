@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use App\Models\LogNotification;
+use App\Repository\LogNotificationRepository;
 use Illuminate\Notifications\Notification;
  
 class LogChannel
@@ -12,8 +13,8 @@ class LogChannel
      */
     public function send(object $notifiable, Notification $notification): void
     {
- 
-        LogNotification::create([
+        $service = new LogNotificationRepository();
+        $service->create([
             'category' => $notification->category,
             'message' => $notification->message,
             'type' => $notification->type,

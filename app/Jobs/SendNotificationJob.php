@@ -2,11 +2,13 @@
 
 namespace App\Jobs;
 
+use App\Enums\ChannelTypeEnum;
 use App\Models\Category;
 use App\Models\User;
 use App\Notifications\SendMailNotification;
 use App\Notifications\SendPushNotification;
 use App\Notifications\SendSMSNotification;
+use App\Repository\UserRepository;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -34,12 +36,15 @@ class SendNotificationJob implements ShouldQueue
     {
         $message = $this->message;
         $categoryName = $this->category->name;
-        User::filterCategory($this->category)->with('channels')->get()->map(function($user) use($message,$categoryName){
+        $user = new UserRepository();
+        $user->filterCategory($this->category)->map(function($user) use($message,$categoryName){
             $user->channels->map(function($channel) use ($message,$user,$categoryName){
-                match ($channel->id) {
-                     1 =>  $user->notify(new SendSMSNotification($categoryName,$message)),
-                     2 =>  $user->notify(new SendMailNotification($categoryName,$message)),
-                     3 =>  $user->notify(new SendPushNotification($categoryName,$message)),
+
+                match ($channel->name) {
+                    ChannelTypeEnum::SMS->name =>  $user->notify(new SendSMSNotification($categoryName,$message)),
+                    ChannelTypeEnum::Email->name =>  $user->notify(new SendMailNotification($categoryName,$message)),
+                    ChannelTypeEnum::PushNotification->name =>  $user->notify(new SendPushNotification($categoryName,$message)),
+                    default => ''
                 };
                 
             });

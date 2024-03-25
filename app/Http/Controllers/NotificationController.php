@@ -3,27 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\NotificationRequest;
-use App\Jobs\SendNotificationJob;
-use App\Models\Category;
-use App\Models\LogNotification;
-use Illuminate\Http\Request;
+use App\Repository\CategoryRepository;
+use App\Repository\LogNotificationRepository;
+use App\Services\SendNotificationService;
 
 class NotificationController extends Controller
 {
-    public function formNotification(){
-        return view('notification')->with('categories',Category::all());
+    public function formNotification(CategoryRepository $category){
+        return view('notification')->with('categories',$category->get());
     }
 
-    public function sendNotification(NotificationRequest $request){
-        $category = Category::find($request->category);
-        SendNotificationJob::dispatch($category,$request->message);
+    public function sendNotification(SendNotificationService $service,NotificationRequest $request,CategoryRepository $category){
+        $service->sendNotification($request,$category);
         return redirect()->back()->with('success','Mensaje enviado correctamente');
     }
 
-    public function logNotification(){
-
-        $logs = LogNotification::orderBy('id','desc')->with('user')->paginate(50);
-
+    public function logNotification(LogNotificationRepository $repository){
+        $logs = $repository->paginate();
         return view('table_notification')->with('logs',$logs);
     }
 }
