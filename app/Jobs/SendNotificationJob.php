@@ -8,7 +8,7 @@ use App\Models\User;
 use App\Notifications\SendMailNotification;
 use App\Notifications\SendPushNotification;
 use App\Notifications\SendSMSNotification;
-use App\Repository\UserRepository;
+use App\Repositories\UserRepository;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;

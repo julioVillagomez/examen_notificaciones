@@ -3,7 +3,7 @@
 namespace App\Notifications;
 
 use App\Models\LogNotification;
-use App\Repository\LogNotificationRepository;
+use App\Repositories\LogNotificationRepository;
 use Illuminate\Notifications\Notification;
  
 class LogChannel

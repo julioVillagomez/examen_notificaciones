@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\NotificationRequest;
-use App\Repository\CategoryRepository;
-use App\Repository\LogNotificationRepository;
+use App\Repositories\CategoryRepository;
+use App\Repositories\LogNotificationRepository;
 use App\Services\SendNotificationService;
 
 class NotificationController extends Controller
